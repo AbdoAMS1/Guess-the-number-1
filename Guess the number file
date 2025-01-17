@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Number</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .group-members {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Guess The Number</h1>
+    <p>النظام قام بتوليد رقم عشوائي بين 1 و 100. حاول تخمين الرقم!</p>
+    <p>عدد المحاولات المتبقية: <span id="attempts">7</span></p>
+    <input type="number" id="guessInput" placeholder="أدخل رقمك هنا" min="1" max="100">
+    <button id="guessButton">تخمين</button>
+    <p class="result" id="resultMessage"></p>
+    <div class="group-members">
+        <p>أسماء المجموعة:</p>
+        <ul>
+            <li>عبد الهميمن الشرع</li>
+            <li>أيوب التومي</li>
+            <li>سليمان</li>
+            <li>عبد المهيمن الشول</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // النظام يقوم بتوليد رقم عشوائي بين 1 و 100
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    let attemptsLeft = 7;
+
+    // ربط العناصر من HTML
+    const attemptsElement = document.getElementById('attempts');
+    const guessInput = document.getElementById('guessInput');
+    const guessButton = document.getElementById('guessButton');
+    const resultMessage = document.getElementById('resultMessage');
+
+    // عندما يضغط اللاعب على زر التخمين
+    guessButton.addEventListener('click', () => {
+        const userGuess = parseInt(guessInput.value);
+
+        // التحقق من صحة الإدخال
+        if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+            resultMessage.textContent = 'يرجى إدخال رقم صحيح بين 1 و 100!';
+            resultMessage.style.color = 'red';
+            return;
+        }
+
+        // تقليل عدد المحاولات
+        attemptsLeft--;
+        attemptsElement.textContent = attemptsLeft;
+
+        // التحقق من النتيجة
+        if (userGuess === randomNumber) {
+            resultMessage.textContent = `مبروك! لقد خمنت الرقم الصحيح: ${randomNumber}`;
+            resultMessage.style.color = 'green';
+            guessButton.disabled = true;
+        } else if (attemptsLeft === 0) {
+            resultMessage.textContent = `لقد خسرت! الرقم الصحيح كان: ${randomNumber}`;
+            resultMessage.style.color = 'red';
+            guessButton.disabled = true;
+        } else {
+            if (userGuess < randomNumber) {
+                resultMessage.textContent = 'حاول برقم أكبر!';
+            } else {
+                resultMessage.textContent = 'حاول برقم أصغر!';
+            }
+            resultMessage.style.color = 'blue';
+        }
+
+        // تفريغ حقل الإدخال
+        guessInput.value = '';
+    });
+</script>
+
+</body>
+</html>
